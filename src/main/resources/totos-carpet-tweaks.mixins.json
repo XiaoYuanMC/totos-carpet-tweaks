@@ -2,11 +2,10 @@
   "required": true,
   "minVersion": "0.8",
   "package": "totoscarpettweaks.mixins",
-  "compatibilityLevel": "JAVA_16",
+  "compatibilityLevel": "JAVA_25",
   "mixins": [
   ],
   "server": [
-    "globalmajorpositive.VillagerGossips$ReputationInvoker",
     "globalmajorpositive.VillagerGossipsMixin",
     "piglinguarding.PiglinBrainMixin",
     "returnspectators.ServerPlayerEntityMixin",

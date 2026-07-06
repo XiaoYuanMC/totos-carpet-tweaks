@@ -7,9 +7,9 @@ import carpet.logging.Logger;
 import carpet.logging.LoggerRegistry;
 import carpet.utils.Translations;
 import com.mojang.brigadier.CommandDispatcher;
-import net.minecraft.command.CommandRegistryAccess;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.commands.CommandBuildContext;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.level.ServerPlayer;
 import totoscarpettweaks.commands.ToggleSpectatorCommand;
 import totoscarpettweaks.listeners.PlayerLoggedInListener;
 
@@ -31,8 +31,8 @@ public class TotoCarpetServer implements CarpetExtension {
 	}
 
 	@Override
-	public void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher,
-								 final CommandRegistryAccess commandBuildContext) {
+	public void registerCommands(CommandDispatcher<CommandSourceStack> dispatcher,
+								 final CommandBuildContext commandBuildContext) {
 		ToggleSpectatorCommand.register(dispatcher);
 	}
 
@@ -46,7 +46,7 @@ public class TotoCarpetServer implements CarpetExtension {
 	}
 
 	@Override
-	public void onPlayerLoggedIn(ServerPlayerEntity player) {
+	public void onPlayerLoggedIn(ServerPlayer player) {
 		playerLoggedInListener.handle(player);
 	}
 

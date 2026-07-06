@@ -1,17 +1,15 @@
 package totoscarpettweaks.fakes;
 
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-
-import java.util.Optional;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 public interface ServerPlayerEntityInterface {
     public boolean toto$hasReturnPosition();
-    public Vec3d getSurvivalPosition();
+    public Vec3 getSurvivalPosition();
     public float getSurvivalYaw();
     public float getSurvivalPitch();
-    public RegistryKey<World> getSurvivalWorldKey();
+    public ResourceKey<Level> getSurvivalWorldKey();
     public String getSurvivalDimensionName();
     public void rememberSurvivalPosition();
     public boolean tryReturnToSurvivalPosition();

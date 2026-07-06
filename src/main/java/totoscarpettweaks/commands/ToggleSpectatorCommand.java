@@ -4,15 +4,15 @@ import carpet.patches.EntityPlayerMPFake;
 import carpet.utils.CommandHelper;
 import carpet.utils.Messenger;
 import com.mojang.brigadier.CommandDispatcher;
-import net.minecraft.server.command.ServerCommandSource;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.phys.Vec3;
 import totoscarpettweaks.TotoCarpetSettings;
 import totoscarpettweaks.fakes.ServerPlayerEntityInterface;
 
-import static net.minecraft.server.command.CommandManager.literal;
-import static net.minecraft.world.GameMode.SPECTATOR;
-import static net.minecraft.world.GameMode.SURVIVAL;
+import static net.minecraft.commands.Commands.literal;
+import static net.minecraft.world.level.GameType.SPECTATOR;
+import static net.minecraft.world.level.GameType.SURVIVAL;
 
 /***
  * While the mod will remember survival positions when using the standard /gamemode command or F3+N,
@@ -23,7 +23,7 @@ public class ToggleSpectatorCommand {
     private static final String POSITION_FORMAT_TEMPLATE = "w %.0f ";
     private static final String DIMENSION_FORMAT_TEMPLATE = "w %s";
 
-    public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
+    public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
                 literal("ts")
                         .requires(c -> TotoCarpetSettings.returnSpectators &&
@@ -35,23 +35,23 @@ public class ToggleSpectatorCommand {
                         ));
     }
 
-    private static int toggleSpectator(ServerCommandSource source) {
-        ServerPlayerEntity player = source.getPlayer();
+    private static int toggleSpectator(CommandSourceStack source) {
+        ServerPlayer player = source.getPlayer();
         if (player instanceof EntityPlayerMPFake) {
             Messenger.m(player, "r Command cannot be used on a fake player.");
             return 0;
         }
 
-        if (player.interactionManager.getGameMode() == SURVIVAL) {
-            player.changeGameMode(SPECTATOR);
+        if (player.gameMode.getGameModeForPlayer() == SURVIVAL) {
+            player.setGameMode(SPECTATOR);
         } else {
-            player.changeGameMode(SURVIVAL);
+            player.setGameMode(SURVIVAL);
         }
         return 1;
     }
 
-    private static int spectatorInfo(ServerCommandSource source) {
-        ServerPlayerEntity player = source.getPlayer();
+    private static int spectatorInfo(CommandSourceStack source) {
+        ServerPlayer player = source.getPlayer();
         if (!player.isSpectator()) {
             Messenger.m(player, "r You are not in spectator mode.");
             return 0;
@@ -69,7 +69,7 @@ public class ToggleSpectatorCommand {
             return 0;
         }
 
-        Vec3d pos = totoPlayer.getSurvivalPosition();
+        Vec3 pos = totoPlayer.getSurvivalPosition();
         Messenger.m(player,
                 "y X ",
                 String.format(POSITION_FORMAT_TEMPLATE, pos.x),
